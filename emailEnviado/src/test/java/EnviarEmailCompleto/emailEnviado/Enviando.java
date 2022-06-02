@@ -1,7 +1,9 @@
 package EnviarEmailCompleto.emailEnviado;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 import javax.mail.Address;
@@ -10,21 +12,39 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.SharedFileInputStream;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class Enviando {
+	
+ private FileInputStream simuladorpdf()throws Exception{
+		Document documento =new Document();
+		File file=new File("anexo.pdf");
+		file.createNewFile();
+		PdfWriter.getInstance(documento,new FileOutputStream(file));
+		documento.open();
+		documento.add(new Paragraph("Conteudo do pdf anexo"));
+		documento.close();
+		return new FileInputStream(file);
+		
+	}
 
+	private String userName ="ThiagoTesteEmail168@gmail.com";
+	private String senha="25059090";
 	
 	
+	private String listaDestinatarios ="tmachado807@gmail.com,ThiagoTesteEmail168@gmail.com";
+	private String nomeRemetente =userName;
+	private String assuntoEmail= "Chegou Email enviado com java";
+	private String textEmail="Olá programador, vc acaba de receber um e-mail enviado com java";
 
-		
 
-		private String userName ="ThiagoTesteEmail168@gmail.com";
-		
-		private String senha="25059090";
-		
 		
 		@org.junit.Test    // com junit serve para testar unitario metodos 
-		public void Email(){ // metodo  criado para teste
+		public void Email (){ // metodo  criado para teste
 			try {
 			/*Olhar as configuraçoes smtp do seu email*/
 			Properties properties =new Properties();
@@ -48,17 +68,35 @@ public class Enviando {
 			
 			});
 			
-			System.err.println(senha);
+			System.err.println("Enviado");
 			
-			Address[] toUser = InternetAddress.parse("tmachado807@gmail.com,ThiagoTesteEmail168@gmail.com");
+			Address[] toUser = InternetAddress.parse(listaDestinatarios);//lista desejada para quem eu quero mandar
 					
-			Message mensagem =new MimeMessage(session);
-			mensagem.setFrom(new InternetAddress(userName));// quem esta enviando
-			mensagem.setRecipients(Message.RecipientType.TO, toUser);
-			mensagem.setSubject("Chegou Email enviado com java");
-			mensagem.setText("Olá programador, vc acaba de receber um e-mail enviado com java ");
+			Message mensagem =new MimeMessage(session);//aqui para escrever o assunto e o texto do email
+			mensagem.setFrom(new InternetAddress(nomeRemetente));// quem esta enviando
+			mensagem.setRecipients(Message.RecipientType.TO, toUser);//aqui irá inserir
+			mensagem.setSubject(assuntoEmail);
+			mensagem.setText(textEmail);
+		
+			
 			
 		Transport.send(mensagem);
+		
+		
+		/*Envio de email*/
+			
+		
+		
+		
+		
+		
+		
+		
+		
+	 Thread.sleep(5000);
+		
+	 
+
 		
 			
 			}catch (Exception e) {
@@ -67,10 +105,15 @@ public class Enviando {
 			}
 			
 		}
-		
-		
-		
-		
+
+
+
+		private void FileInputStream() {
+			// TODO Auto-generated method stub
+			
+		}
+
+
 		
 		
 	}
